@@ -1,0 +1,445 @@
+    1  sudo apt-get update
+    2  sudo apt-get install ca-certificates curl gnupg lsb-release
+    3  sudo mkdir -p /etc/apt/keyrings
+    4  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    5  echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+    6    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    7  sudo apt-get update
+    8  sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    9  sudo apt-get update
+   10  sudo apt-get install containerd.io docker-compose-plugin
+   11  sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+   12  echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+   13  sudo apt-get update
+   14  sudo apt-get install -y kubelet kubeadm kubectl
+   15  cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+   16  overlay
+   17  br_netfilter
+   18  EOF
+   19  sudo modprobe overlay
+   20  sudo modprobe br_netfilter
+   21  cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+   22  net.bridge.bridge-nf-call-iptables  = 1
+   23  net.bridge.bridge-nf-call-ip6tables = 1
+   24  net.ipv4.ip_forward                 = 1
+   25  EOF
+   26  sudo sysctl --system
+   27  rm -rf /etc/containerd/config.toml
+   28  cat <<EOF | sudo tee /etc/containerd/config.toml
+   29  version = 2
+   30  [plugins]
+   31    [plugins."io.containerd.grpc.v1.cri"]
+   32     [plugins."io.containerd.grpc.v1.cri".containerd]
+   33        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+   34          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+   35            runtime_type = "io.containerd.runc.v2"
+   36            [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+   37              SystemdCgroup = true
+   38  EOF
+   39  sudo systemctl restart containerd
+   40  kubeadm init
+   41  ][p
+   42  pwd
+   43  mkdir -p $HOME/.kube
+   44  ls -al
+   45  cd ~
+   46  ls -al
+   47  cd /home/krishna_raidentechgroup
+   48  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   49  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+   50  kubectl get nodes
+   51  curl https://raw.githubusercontent.com/projectcalico/calico/v3.24.5/manifests/calico.yaml -O
+   52  kubectl apply -f calico.yaml
+   53  kubectl get po -n kube-system
+   54  kubectl get nodes
+   55  crictl ps
+   56  crictl images list
+   57  kubectl get nodes
+   58  clear
+   59  kubectl get nodes
+   60  kubectl get node
+   61  clear
+   62  kubectl get namespace
+   63  alias kubectl=k
+   64  k get node
+   65  alias k=kubectl
+   66  k get node
+   67  unalias k
+   68  alias
+   69  unalias kubectl
+   70  alias
+   71  alias k ='kubectl'
+   72  alias k = 'kubectl'
+   73  clear
+   74  alias k =kubectl
+   75  clear
+   76  kubectl get node
+   77  clear
+   78  alias k="kubectl"
+   79  k get node
+   80  clear
+   81  k create -n hubs
+   82  k get po -n kube-system
+   83  crictl ps
+   84  crictl images list
+   85  k get node
+   86  k describe instance-1
+   87  k describe node  instance-1
+   88  k get namespace
+   89  k create ns hubs
+   90  k get namespace
+   91  k run mongo --image=mongo -n hubs
+   92  k get node
+   93  k get po -n hubs
+   94  k get po 
+   95  k get pods
+   96  k get namespaces
+   97  k get po -a
+   98  k get po -A
+   99  k get node
+  100  k describe node instance-1
+  101  k get node
+  102  alias k = kubectl
+  103  alias k = "kubectl"
+  104  alias k ="kubectl"
+  105  kubectl get node
+  106  k get node
+  107  alias k="kubectl"
+  108  k get node
+  109  clear
+  110  k get node
+  111  k describe node instance-1
+  112  k taint node instance-1  node-role.kubernetes.io/control-plane-
+  113  k get node
+  114  k get pd -n hubs
+  115  k get po -n hubs
+  116  k log po mongo -n hubs
+  117  k logs po mongo -n hubs
+  118  k logs pods mongo -n hubs
+  119  k logs  mongo -n hubs
+  120  k logs  mongo -n hubs > /tmp/api.log
+  121  ls -al
+  122  cd /tmp
+  123  ls -al
+  124  cat api.log
+  125  cd ..
+  126  pwd
+  127  cd home
+  128  ls -al
+  129  cd krishna_raidentechgroup/
+  130  ls -al
+  131  vi simple-pod.yaml
+  132  k apply -f simple-pod.yaml -n hubs
+  133  k get node
+  134  k get po -n hubs
+  135  k get po origin -n hubs
+  136  k get po origin 
+  137  k get po -A
+  138  k get po origin
+  139  k get po origin -n hubs
+  140  crictl ps
+  141  vim nginx-deployment-app.yaml
+  142  k apply nginx-deployment-app.yaml -n hubs
+  143  k apply -f nginx-deployment-app.yaml -n hubs
+  144  k get node
+  145  k get po
+  146  k get po -n hubs
+  147  cat nginx-deployment-app.yaml 
+  148  k get po -n hubs
+  149  k delete po nginx-app-69dd8b8cd5-69b6l 
+  150  k delete po nginx-app-69dd8b8cd5-69b6l  -n hubs
+  151  k get po -n hubs
+  152  vim nginx-deployment-app.yaml
+  153  k apply -f nginx-deployment-app.yaml -n hubs 
+  154  k get po -n hubs
+  155  k get rs
+  156  k get replicaset
+  157  k get rs -n hubs
+  158  k get deployments
+  159  k get deeployments -n hubs
+  160  k get deployments -n hubs
+  161  ls -al
+  162  cat nginx-deployment-app.yaml 
+  163  k rollout status Deployment-apps-v1/nginx-app
+  164  k rollout status Deployment/nginx-app
+  165  k rollout status deployment/nginx-app
+  166  k rollout status deployment/nginx-deployment-app
+  167  k rollout status deployment/nginx-deployment-app -n hubs
+  168  k rollout status deployment/nginx-app -n hubs
+  169  kubectl get pods
+  170  kubectl get pods -n hubs
+  171  kubectl rollout undo deployment/nginx-app
+  172  kubectl rollout undo deployment/nginx-app -n hubs
+  173  kubectl get pods -n hubs
+  174  kubectl get rs -n hubs
+  175  kubectl scale deployment/nginx-app -n hubs --replicas=4
+  176  kubectl get rs -n hubs
+  177  kubectl get po -n hubs
+  178  cd /etc/
+  179  ls -al
+  180  cd kubernetes/
+  181  ls -al
+  182  cd manifests/
+  183  ls -al
+  184  kubectl get node
+  185  ssh instance-1
+  186  cd /etc/
+  187  ls -al
+  188  cd kubernetes/
+  189  ls -al
+  190  cat <<EOF >/etc/kubernetes/manifests/static-web.yaml
+  191  apiVersion: v1
+  192  kind: Pod
+  193  metadata:
+  194    name: static-redis
+  195    labels:
+  196      role: myrole
+  197  spec:
+  198    containers:
+  199      - name: static-redis
+  200        image: redis
+  201        ports:
+  202          - name: web
+  203            containerPort: 6379
+  204            protocol: TCP
+  205  EOF
+  206  ls -al
+  207  pwd
+  208  cd manifests/
+  209  ls -al
+  210  cd ~
+  211  cd /home
+  212  ls -al
+  213  cd krishna_raidentechgroup/
+  214  kubectl get node
+  215  ctlctr ps
+  216  crlctl ps
+  217  ctlcrl ps
+  218  crictl ps
+  219  kubectl get po
+  220  vim replicaset.yaml
+  221  kubectl apply replicaset.yaml -n hubs
+  222  kubectl apply -f replicaset.yaml -n hubs
+  223  vim replicaset.yaml
+  224  k apply -f replicaset.yaml -n hubs 
+  225  kubectl apply -f replicaset.yaml -n hubs 
+  226  cat replicaset.yaml 
+  227  vim replicaset.yaml 
+  228  kubectl apply -f replicaset.yaml -n hubs 
+  229  vim replicaset.yaml 
+  230  kubectl apply -f replicaset.yaml -n hubs 
+  231  kubectl get node
+  232  kubectl get node -n hubs
+  233  kubectl get po -n hubs
+  234  vim replicaset.yaml 
+  235  kubectl get po -n hubs
+  236  kubectl delete webapp-0 -n hubs
+  237  kubectl delete po webapp-0 -n hubs
+  238  kubectl get po -n hubs
+  239  kubectl delete webapp-2 -n hubs
+  240  kubectl get po -n hubs
+  241  kubectl delete po webapp-2 -n hubs
+  242  kubectl get po -n hubs
+  243  kubectl get deamonsets
+  244  kubectl get deamonsets 
+  245  kubectl get deamonsets -n hubs
+  246  kubectl get namespace
+  247  kubectl get deamonsets -n kube-system
+  248  kubectl get daemonsets -n kube-system
+  249  kubectl get daemonsets 
+  250  kubectl get daemonsets -n hubs
+  251  kubectl get daemonsets -n default
+  252  kubectl get daemonsets -n kube-node-lease
+  253  kubectl get daemonsets -n kube-public
+  254  kubectl get daemonsets -n kube-system
+  255  vim daemonset.yaml
+  256  kubectl apply -f daemonset.yaml 
+  257  vim daemonset.yaml
+  258  kubectl apply -f daemonset.yaml 
+  259  kubectl get node
+  260  kubectl get po -n hubs
+  261  kubectl get po
+  262  kubectl get po - n hubs
+  263  kubectl get po -n hubs
+  264  kubectl get daemonsets -n hubs
+  265  kubectl label node instance-1 app=fluentd
+  266  kubectl get nodes -l app=fluentd
+  267  kubectl get daemonsets -n hubs
+  268  kubectl get po -n hubs
+  269  vim daemonset.yaml
+  270  kubectl apply -f daemonset.yaml 
+  271  kubectl get po -n hubs
+  272  ipconfig
+  273  ifconfig
+  274  hostname
+  275  hostname -i
+  276  kubectl get node
+  277  crictl ps
+  278  netstat
+  279  install net-tools
+  280  apt-get install net-tools
+  281  netstat
+  282  netstat -tulpn | grep LISTEN
+  283  hostname -i
+  284  ps aux | grep http
+  285  netstat -lnpt | grep :80	
+  286  kubectl get po -n kube-system
+  287  kubectl get pods -n kube-system
+  288  kubectl exec etcd-instance-1 -n kube-system etcdctl get / --prefix -keys-only-
+  289  kubectl exec etcd-instance-1 -n kube-system etcdctl get / --prefix -keys-only
+  290  clear
+  291  ls -al
+  292  mkdir files
+  293  cp daemonset.yaml files
+  294  cp nginx-deployment-app.yaml files
+  295  cp replicaset.yaml files
+  296  cp simple-pod.yaml fles
+  297  ls -al
+  298  cp fles files
+  299  rm -f fles
+  300  ls -al
+  301  cd files
+  302  ls -al
+  303  cp fles simple-pod.yaml
+  304  ls -al
+  305  rm -f fles
+  306  ls -al
+  307  git init
+  308  ls -al
+  309  git commit -m "Moving specific yaml files"
+  310  git add .
+  311  git commit -m "Moving specific yaml files"
+  312  git branch -M main
+  313  git remote add origin https://github.com/skpacha0/k8s.git
+  314  git push -u origin main
+  315  vim demo.yaml
+  316  kubectl apply -f demo.yaml -n hubs
+  317  vim demo.yaml
+  318  kubectl apply -f demo.yaml -n hubs
+  319  vim demo.yaml
+  320  kubectl apply -f demo.yaml -n hubs
+  321  echo super | base64
+  322  echo origin | base64
+  323  ls -al
+  324  vim fero.yaml
+  325  kubectl apply -f fero.yaml -n hubs
+  326  kubectl get node
+  327  kubectl get pods -n hubs
+  328  vim fero.yaml
+  329  kubectl apply -f fero.yaml -n hubs
+  330  kubectl get pods -n hubs
+  331  kubectl delete pods my-pod -n hubs
+  332  kubectl apply -f fero.yaml -n hubs
+  333  kubectl get pods -n hubs
+  334  vim cm.yaml
+  335  vim cm-demo.yaml
+  336  kubectl apply -f cm-demo.yaml -n hubs
+  337  vim test-pod.yaml
+  338  kubectl apply -f test-pod.yaml -n hubs
+  339  vim test-pod.yaml
+  340  clear
+  341  history
+  342  clear
+  343  kubectl get node
+  344  ls -al
+  345  vim demo-init.yaml
+  346  kubectl apply -f demo-init.yaml 
+  347  vim demo-init.yaml
+  348  kubectl apply -f demo-init.yaml 
+  349  vim demo-init.yaml
+  350  kubectl apply -f demo-init.yaml 
+  351  vim demo-init.yaml
+  352  kubectl apply -f demo-init.yaml -n hubs
+  353  vim demo-init.yaml
+  354  kubectl apply -f demo-init.yaml -n hubs
+  355  vim demo-init.yaml
+  356  kubectl apply -f demo-init.yaml -n hubs
+  357  kubectl get po -n hubs
+  358  kubectl logs myapp-pod2 -n hubs
+  359  vim demo-init.yaml
+  360  kubectl apply -f demo-init.yaml -n hubs
+  361  kubectl po -n hubs
+  362  kubectl get po -n hubs
+  363  kubectl delete myapp-pod2 -n hubs
+  364  kubectl delete po myapp-pod2 -n hubs
+  365  kubectl get po -n hubs
+  366  kubectl apply -f demo-init.yaml -n hubs
+  367  kubectl logs myapp-pod2 -n hubs
+  368  vim demo-init.yaml
+  369  kubectl delete po myapp-pod2 -n hubs
+  370  vim demo-init.yaml
+  371  kubectl apply -f demo-init.yaml -n hubs
+  372  kubectl logs myapp-pod2 -n hubs
+  373  kubectl get po -n hubs
+  374  kubectl logs myapp-pod2 -n hubs
+  375  kubectl get po -n hubs
+  376  clear
+  377  kubectl delete po myapp-pod2 -n hubs
+  378  kubectl get po -n hubs
+  379  kubectl delete po myapp-pod -n hubs
+  380  kubectl delete po myapp-pod 
+  381  kubectl delete po my-pod -n hubs 
+  382  kubectl get po -n hubs
+  383  clear
+  384  vim demo-init.yaml
+  385  kubectl get po -n hubs
+  386  kubectl 
+  387  kubectl logs myapp-pod2 -n hubs
+  388  kubectl get po -n hubs
+  389  vim demo-init.yaml
+  390  kubectl delete po my-pod -n hubs 
+  391  kubectl logs myapp-pod2 -n hubs
+  392  kubectl delete po myapp-pod 
+  393  kubectl delete po myapp-pod -n hubs
+  394  kubectl delete po myapp-pod2 -n hubs
+  395  kubectl get po -n hubs
+  396  kubectl delete po fluentd-elasticsearch-v9rr7 -n hubs
+  397  kubectl get po -n hubs
+  398  kubectl apply -f demo-init.yaml -n hubs
+  399  kubectl get po -n hubs
+  400  kubectl logs myapp-pod2 -n hubs
+  401  vim demo-init.yaml
+  402  kubectl delete po myapp-pod2 -n hubs
+  403  kubectl apply -f demo-init.yaml -n hubs
+  404  kubectl logs myapp-pod2 -n hubs
+  405  vim demo-init.yaml
+  406  kubectl delete po myapp-pod2 -n hubs
+  407  kubectl apply -f demo-init.yaml -n hubs
+  408  kubectl logs myapp-pod2 -n hubs
+  409  vim demo-init.yaml
+  410  kubectl delete po myapp-pod2 -n hubs
+  411  kubectl logs myapp-pod2 -n hubs
+  412  kubectl apply -f demo-init.yaml -n hubs
+  413  kubectl logs myapp-pod2 -n hubs
+  414  kubectl get po -n hubs
+  415  kubectl logs myapp-pod2 -n hubs
+  416  kubectl get po -n hubs
+  417  vim demo-init.yaml
+  418  kubectl get po -n hubs
+  419  kubectl delete po myapp-pod2 -n hubs
+  420  kubectl apply -f demo-init.yaml -n hubs
+  421  kubectl get po -n hubs
+  422  kubectl logs myapp-pod2 -n hubs
+  423  kubectl get po -n hubs
+  424  kubectl logs myapp-pod2 -n hubs
+  425  vim demo-init.yaml
+  426  kubectl delete po myapp-pod2 -n hubs
+  427  kubectl get po -n hubs
+  428  kubectl logs myapp-pod2 -n hubs
+  429  kubectl apply -f demo-init.yaml -n hubs
+  430  vim demo-init.yaml
+  431  kubectl delete po myapp-pod2 -n hubs
+  432  kubectl get po -n hubs
+  433  kubectl apply -f demo-init.yaml -n hubs
+  434  vim demo-init.yaml
+  435  kubectl delete po myapp-pod2 -n hubs
+  436  kubectl apply -f demo-init.yaml -n hubs
+  437  kubectl get po -n hubs
+  438  kubectl logs myapp-pod2 -n hubs
+  439  kubectl get po -n hubs
+  440  kubectl logs myapp-pod2 -n hubs
+  441  kubectl get po -n hubs
+  442  vim simple-pod.yaml 
+  443  history
+  444  histroy > cd.txt
+  445  history > cd.txt

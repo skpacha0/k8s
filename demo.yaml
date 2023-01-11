@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod
+spec:
+  containers:
+    - name: demo
+      image: init
+      command: cat /tmp/test.txt
+      volumeMounts:
+    - name: foo
+      mountPath: "/tmp/test.txt"
+      readOnly: true
+  volumes:
+  - name: foo
